@@ -51,4 +51,4 @@ def remove_background():
     return jsonify({'result': os.getenv('AWS_DOMAIN') + object_name})
 
 if __name__ == '__main__':
-    app.run(debug=os.getenv('FLASK_DEBUG', 'False').lower() in ['true', '1', 't'])
+    app.run(host='0.0.0.0', port=5000, debug=os.getenv('FLASK_DEBUG', 'False').lower() in ['true', '1', 't'])
