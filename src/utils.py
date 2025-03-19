@@ -3,13 +3,20 @@ import os
 from rembg import remove
 import urllib.request
 import boto3
+from datetime import datetime
+from urllib.parse import urlparse
 
 #carpeta temporal para guardar las imagenes
 #temp_folder = os.path.join(os.getcwd(), 'temp') + '/'
 temp_folder = 'temp/'
 
-def remove_background_image(input_path):
-    output_path =  input_path.split('.')[0] + '_nobg.png'
+def remove_background_image(input_path, file_name=None):
+
+    if file_name:
+        output_path =  temp_folder + file_name
+    else:   
+        output_path =  input_path.split('.')[0] + '_nobg.png'
+    
     with open(input_path, 'rb') as i:
         with open(output_path, 'wb') as o:
             input = i.read()
@@ -17,7 +24,7 @@ def remove_background_image(input_path):
             o.write(output)
     return output_path
 
-def renameImageUrl(image_url):
+def renameImageUrl(image_url, rename=False):
     #chequeo que no este vacio
     if not image_url:
         return 'empty-url'
@@ -30,14 +37,20 @@ def renameImageUrl(image_url):
     if not image_url.startswith('http'):
         return 'not-url'
     
-    #agrego nombre extrayendo extension y poniendo fecha y hora de hoy
-    from datetime import datetime
-    now = datetime.now()
-    #renombro con la fecha de hoy + la extension
-    input_path = now.strftime("%Y%m%d%H%M%S") + '.' + image_url.split('.')[-1]
-    #agrego carpeta temp al nombre
-    input_path = temp_folder + input_path
-    
+    if rename:
+        #agrego nombre extrayendo extension y poniendo fecha y hora de hoy
+       
+        now = datetime.now()
+        #renombro con la fecha de hoy + la extension
+        input_path = now.strftime("%Y%m%d%H%M%S") + '.' + image_url.split('.')[-1]
+        #agrego carpeta temp al nombre
+        input_path = temp_folder + input_path
+    else:
+        #extraer de la url el nombre y la extension
+        parsed_url = urlparse(image_url)
+        input_path = os.path.basename(parsed_url.path)
+        #agrego carpeta temp al nombre
+        input_path = temp_folder + input_path
     return input_path
 
 def downloadImageFromURL(image_url, input_path):
