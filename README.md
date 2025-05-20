@@ -12,14 +12,14 @@ https://github.com/danielgatis/rembg?tab=readme-ov-file
 ## ¿cómo funciona?
 
 Llamar al endpoint "/remove-background" por POST con estos parámetros:
-´´´json
+```json
 {
     "image_url": "https://helios-i.mashable.com/imagery/articles/05djrP5PjtVB7CcMtvrTOAP/images-4.fill.size_2000x1125.v1723100793.jpg",
     "route_to_save": "testing_remover/",
     "bucket" : "skuapi",
     "file_name": "prueba_compu_sin_fondo.png"
 }
-´´´
+```
 El unico obligatorio es image_url. si los otros no estan se va a guardar en los valores por defectos ubicados en el archivo env. 
 S3_BUCKET_NAME=skuapi
 AWS_REGION=us-east-2
